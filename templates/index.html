@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='./styles.css') }}">
+</head>
+<body>
+    <!---->
+    <div class="container">
+        
+        <form action="#" method="post" class="invForm">
+            <h2>Inventory</h2>
+            <label for="Item">Item</label>
+            <select name="Item" id="Item" class="formItem">
+                <option value="Select">Select Item</option>
+
+                <optgroup label="Liquor">
+                    <option value="Whiskey">Whiskey</option>
+                    <option value="Bourban">Bourban</option>
+                    <option value="Vodka">Vodka</option>
+                </optgroup>
+                <optgroup label="FOH Materials">
+                    <option value="wNapkins">White Napkins</option>
+                    <option value="bNapkins">Black Napkins</option>
+                    <option value="wipes">Sanitizer Wipes</option>
+                    <option value="lTogoCup">Large Togo Cup</option>
+                    <option value="sTogoCup">Small Togo Cup</option>
+                    <option value="lTogo">Large Togo</option>
+                    <option value="mTogo">Medium Togo</option>
+                    <option value="sTogo">Small Togo</option>
+                    <option value="togoLid">Togo Lids</option>
+                </optgroup>
+
+                </select>
+
+            <label for="Person">Person</label>
+            <select name="Person" id="Person" class="formItem">
+                <option value="Select">Select Item</option>
+
+                <optGroup label="FOH">
+                    <option value="Tony">Tony</option>
+                    <option value="Jon">Jon</option>
+                    <option value="Anna">Anna</option>
+                </optGroup>
+                <optgroup label="BOH">
+                    <option value="Chef">Chef</option>
+                    <option value="Nat">Nat</option>
+                    <option value="Jesse">Jesse</option>
+                    <option value="Joe">Joe</option>
+                </optgroup>
+            </select>
+
+            <label for="Amount">Inventory Amount</label>
+            <select name="Amount" id="Amount" class="formItem">
+                <option value="Select">Select Item</option>
+                <option value="Almost Out">Almost Out</option>
+                <option value="Out of Stock">Out of Stock</option>
+            </select>
+
+            <label for="date">Date</label>
+            <input type="date" name="Date" id="Date" class="formItem"> 
+
+            <button type="submit" class="button">Submit</button>
+            
+            <br>
+            <img src="{{ url_for('static', filename='logo.svg') }}" alt="Turtle Logo">
+        </form>
+
+        <div class="invForm">
+            <h2>Items To Order</h2>
+            <form action="/remove" method="post">
+            <table id='itemsTable'>
+                <thead>
+                    <th>Remove</th>
+                    <th>Item</th>
+                    <th>Person</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                    <tr>
+                        <td><input type="checkbox" name="check" id="{{item[0]}}" value="{{item[0]}}"></td>
+                        <td>{{ item[0] }}</td>
+                        <td>{{ item[1] }}</td>
+                        <td>{{ item[2] }}</td>
+                        <td>{{ item[3] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+            <input type="submit" value="REMOVE" class="button">
+            </form>
+        </div>
+    </div>
+
+
+</body>
+</html>
