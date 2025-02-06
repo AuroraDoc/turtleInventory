@@ -7,39 +7,41 @@ app.config["SESSION_COOKIE_NAME"] = "Random_Secret_Cookie12345"
 
 connection = sqlite3.connect("items.db", check_same_thread=False, )
 cursor = connection.cursor()
+
 cursor.execute("PRAGMA journal_mode = OFF")
+cursor.execute("create table if not exists items (item_id integer primary key autoincrement, item text, person text, amount text, date text)")
 
-#Create the table if it does not exist yet 
-#cursor.execute("create table items (item text, person text, amount text, date text)")
-
-def insertItemToDB(item, person, amount, date):
-    cursor.execute("insert into items(item,person,amount,date) values(?,?,?,?)", (item, person, amount, date))
+def insertItemToDB(item):
+    cursor.execute("insert into items(item,person,amount,date) values(?,?,?,?)", (item["item"], item["person"], item["amount"], item["date"]))
     connection.commit()
     refreshItems()
 
 def refreshItems():
     data = cursor.execute("select * from items")
-    items = [list(row) for row in data]
-    print(items)
+    items = []
+
+    for row in data:
+        newItem = {
+            "item_id": row[0],
+            "item": row[1],
+            "person": row[2],
+            "amount": row[3],
+            "date": row[4]
+        }
+        items.append(newItem)
     return items
 
-def removeItemFromDB(item):
-    cursor.execute(f"delete from items where item={item}")
+def removeItemFromDB(itemId):
+    cursor.execute(f"delete from items where item_id={itemId}")
     connection.commit()
-    refreshItems()    
+    session["items"] = refreshItems()    
 
 @app.route("/remove", methods=["post"])
 def removeItems():
     checked_boxes = request.form.getlist("check")
 
-    items_list = [item[0] for item in session["items"]]
-
-    for item in checked_boxes:
-        if item in items_list:
-            index = items_list.index(item)
-            session["items"].pop(index)
-            session.modified = True
-            removeItemFromDB(item)
+    for id in checked_boxes:
+        removeItemFromDB(id)
 
     return render_template("index.html", items=session["items"])
 #the issue is that it only finds the first item with that item in the list not the correct one marked. Not the biggest deal since there
@@ -50,14 +52,15 @@ def removeItems():
 @app.route("/", methods=["POST", "GET"])
 def home():
 
-
     if request.method == "POST":
-        item = request.form["Item"]
-        person = request.form["Person"]
-        amount = request.form["Amount"]
-        date = request.form["Date"]
-
-        insertItemToDB(item, person, amount, date)
+        newItem = {
+            "item": request.form["Item"],
+            "person": request.form["Person"],
+            "amount": request.form["Amount"],
+            "date": request.form["Date"]
+        }
+        
+        insertItemToDB(newItem)
 
         session["items"] = refreshItems()
 
@@ -71,4 +74,5 @@ def home():
 
 app.run("0.0.0.0", 80, True)
 
+cursor.close()
 connection.close()
