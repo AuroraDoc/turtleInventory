@@ -82,11 +82,11 @@
                 <tbody>
                     {% for item in items %}
                     <tr>
-                        <td><input type="checkbox" name="check" id="{{item[0]}}" value="{{item[0]}}"></td>
-                        <td>{{ item[0] }}</td>
-                        <td>{{ item[1] }}</td>
-                        <td>{{ item[2] }}</td>
-                        <td>{{ item[3] }}</td>
+                        <td><input type="checkbox" name="check" id="{{item.item_id}}" value="{{item.item_id}}"></td>
+                        <td>{{ item.item }}</td>
+                        <td>{{ item.person }}</td>
+                        <td>{{ item.amount }}</td>
+                        <td>{{ item.date }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
