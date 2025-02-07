@@ -7,7 +7,7 @@
 
 body{
     background: linear-gradient(to bottom right, #a81c0c, #a97e13);
-    height: 120vh;
+    height: 112vh;
     display: flex;
     justify-content: center;
 }
@@ -60,8 +60,15 @@ label{
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    margin-top: 25px;
 }
 
 #itemsTable{
     width: 100%;
+}
+
+@media screen and (max-width: 1080px){
+    .container{
+        display: block;
+    }
 }
