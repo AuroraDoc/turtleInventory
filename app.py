@@ -1,4 +1,4 @@
-from flask import Flask, render_template, session, request, redirect
+from flask import Flask, render_template, session, request, redirect, url_for
 import sqlite3
 
 app = Flask(__name__)
@@ -43,11 +43,7 @@ def removeItems():
     for id in checked_boxes:
         removeItemFromDB(id)
 
-    return render_template("index.html", items=session["items"])
-#the issue is that it only finds the first item with that item in the list not the correct one marked. Not the biggest deal since there
-# shouldnt be duplicates
-
-# Also need to update the db after an item is removed.
+    return redirect(url_for("home"))
 
 @app.route("/", methods=["POST", "GET"])
 def home():
